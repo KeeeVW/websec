@@ -25,6 +25,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
+        'security_question',
+        'security_answer',
+        'is_using_temp_password',
+        'provider',
+        'provider_id',
+        'avatar',
     ];
 
     /**
@@ -47,6 +54,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_using_temp_password' => 'boolean',
         ];
     }
 }

@@ -23,8 +23,13 @@
       </div>
       <div class="form-group mb-2">
         <button type="submit" class="btn btn-primary">Login</button>
+        <a href="{{ route('forgot_password') }}" class="ms-2">Forgot Password?</a>
       </div>
     </form>
+    
+    <div class="text-center">
+      <p>Don't have an account? <a href="{{ route('register') }}">Register</a></p>
+    </div>
     </div>
   </div>
 </div>

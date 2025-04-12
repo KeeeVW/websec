@@ -11,6 +11,20 @@
                 <th>Email</th><td>{{$user->email}}</td>
             </tr>
             <tr>
+                <th>Admin Status</th>
+                <td>
+                    @if($user->is_admin)
+                        <span class="badge bg-danger">Administrator</span>
+                    @else
+                        <span class="badge bg-secondary">Regular User</span>
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <th>Security Question</th>
+                <td>{{ $user->security_question ? $user->security_question : 'Not set' }}</td>
+            </tr>
+            <tr>
                 <th>Roles</th>
                 <td>
                     @foreach($user->roles as $role)
@@ -31,7 +45,7 @@
         <div class="row">
             <div class="col col-6">
             </div>
-            @if(auth()->user()->hasPermissionTo('admin_users')||auth()->id()==$user->id)
+            @if(auth()->check() && (auth()->user()->hasPermissionTo('admin_users')||auth()->id()==$user->id))
             <div class="col col-4">
                 <a class="btn btn-primary" href='{{route('edit_password', $user->id)}}'>Change Password</a>
             </div>
@@ -39,7 +53,7 @@
             <div class="col col-4">
             </div>
             @endif
-            @if(auth()->user()->hasPermissionTo('edit_users')||auth()->id()==$user->id)
+            @if(auth()->check() && (auth()->user()->hasPermissionTo('edit_users')||auth()->id()==$user->id))
             <div class="col col-2">
                 <a href="{{route('users_edit', $user->id)}}" class="btn btn-success form-control">Edit</a>
             </div>

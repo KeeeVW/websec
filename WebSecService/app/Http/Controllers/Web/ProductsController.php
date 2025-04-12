@@ -65,9 +65,15 @@ class ProductsController extends Controller {
 	}
 
 	public function delete(Request $request, Product $product) {
-
-		if(!auth()->user()->hasPermissionTo('delete_products')) abort(401);
-
+		// Check if user is logged in
+		if(!auth()->check()) {
+			return redirect()->route('login');
+		}
+		
+		if(!auth()->user()->hasPermissionTo('delete_products')) {
+			return redirect()->route('products_list')->with('error', 'You do not have permission to delete products');
+		}
+		
 		$product->delete();
 
 		return redirect()->route('products_list');
