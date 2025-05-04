@@ -9,10 +9,13 @@ use App\Http\Controllers\ExamController;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Web\RolesController;
 use App\Http\Controllers\Web\PermissionsController;
+<<<<<<< HEAD
 use App\Http\Controllers\Web\CreditController;
 use App\Http\Controllers\Web\EmployeeCustomerController;
 use App\Http\Controllers\Web\EmployeeController;
 use App\Http\Controllers\GitHubAuthController;
+=======
+>>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
 
 Route::get('register', [UsersController::class, 'register'])->name('register');
 Route::post('register', [UsersController::class, 'doRegister'])->name('do_register');
@@ -156,6 +159,7 @@ Route::get('/test-result', function () {
 });
 
 // Add these routes for roles and permissions management
+<<<<<<< HEAD
 Route::middleware(['auth'])->group(function () {
     Route::resource('roles', RolesController::class);
     Route::resource('permissions', PermissionsController::class);
@@ -311,3 +315,9 @@ Route::post('/debug/fix-credits/{userId}', function($userId) {
 // GitHub Authentication Routes
 Route::get('/auth/github', [GitHubAuthController::class, 'redirectToGitHub'])->name('auth.github');
 Route::get('/auth/github/callback', [GitHubAuthController::class, 'handleGitHubCallback'])->name('auth.github.callback');
+=======
+Route::group(['middleware' => ['auth', 'permission:admin_users']], function () {
+    Route::resource('roles', RolesController::class);
+    Route::resource('permissions', PermissionsController::class);
+});
+>>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414

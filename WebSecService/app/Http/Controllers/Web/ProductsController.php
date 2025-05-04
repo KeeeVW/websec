@@ -113,6 +113,7 @@ class ProductsController extends Controller {
 			return redirect()->route('login');
 		}
 		
+<<<<<<< HEAD
 		// Check if user is an employee or admin
 		$user = Auth::user();
 		if(!$user->isEmployee() && !$user->isAdmin() && 
@@ -120,6 +121,10 @@ class ProductsController extends Controller {
            !$user->hasPermissionTo('manage_products')) {
 			return redirect()->route('products_list')
 				->with('error', 'You do not have permission to delete products');
+=======
+		if(!auth()->user()->hasPermissionTo('delete_products')) {
+			return redirect()->route('products_list')->with('error', 'You do not have permission to delete products');
+>>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
 		}
 		
 		$product->delete();

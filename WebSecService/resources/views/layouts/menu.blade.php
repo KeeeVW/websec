@@ -18,6 +18,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('/transcript') }}">transcript</a>
+<<<<<<< HEAD
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('/calculator') }}">calculator</a>
@@ -68,16 +69,50 @@
                 </li>
                 @endif
             @endauth
+=======
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('/calculator') }}">calculator</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url('/gpa-calculator') }}">gpa-calculator</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('grades.index') }}">Grades</a>
+            </li>
+          
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('questions.index') }}">Manage Questions</a>
+            </li>
+        
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('exam.start') }}">Take Exam</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('products_list') }}">Products</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('users') }}">Users</a>
+            </li>
+>>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
         </ul>
         <ul class="navbar-nav">
             @auth
             <li class="nav-item">
+<<<<<<< HEAD
                 <a class="nav-link" href="{{ route('profile') }}">
                     {{ auth()->user()->name }}
                     @if(auth()->user()->isCustomer())
                         <span class="badge bg-success">${{ number_format(auth()->user()->getCreditAmount(), 2) }}</span>
                     @endif
                 </a>
+=======
+                <a class="nav-link" href="{{ route('profile') }}">{{ auth()->user()->name }}</a>
+>>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('do_logout') }}">Logout</a>

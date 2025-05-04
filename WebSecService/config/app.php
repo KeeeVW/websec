@@ -164,7 +164,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+<<<<<<< HEAD
         Spatie\Permission\PermissionServiceProvider::class,
+=======
+>>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
     ],
 
     /*

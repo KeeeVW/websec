@@ -27,6 +27,7 @@
       </div>
     </form>
     
+<<<<<<< HEAD
     <div class="login-divider my-4">
       <span>OR</span>
     </div>
@@ -38,6 +39,8 @@
       </a>
     </div>
     
+=======
+>>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
     <div class="text-center">
       <p>Don't have an account? <a href="{{ route('register') }}">Register</a></p>
     </div>

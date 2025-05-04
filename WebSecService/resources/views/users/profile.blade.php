@@ -18,7 +18,25 @@
             </tr>
             @if($user->isCustomer())
             <tr>
+<<<<<<< HEAD
                 <th>Credit Balance</th>
+=======
+                <th>Admin Status</th>
+                <td>
+                    @if($user->is_admin)
+                        <span class="badge bg-danger">Administrator</span>
+                    @else
+                        <span class="badge bg-secondary">Regular User</span>
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <th>Security Question</th>
+                <td>{{ $user->security_question ? $user->security_question : 'Not set' }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+>>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
                 <td>
                     <span class="fs-4 fw-bold text-success">${{ number_format($user->getCreditAmount(), 2) }}</span>
                 </td>

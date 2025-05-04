@@ -32,7 +32,10 @@ class User extends Authenticatable
         'provider',
         'provider_id',
         'avatar',
+<<<<<<< HEAD
         'is_blocked',
+=======
+>>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
     ];
 
     /**
