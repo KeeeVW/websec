@@ -6,11 +6,24 @@
         <h1>Products</h1>
     </div>
     <div class="col col-2">
-        @can('add_products')
+        @if(auth()->check() && (auth()->user()->isEmployee() || auth()->user()->isAdmin() || auth()->user()->hasPermissionTo('add_products') || auth()->user()->hasPermissionTo('manage_products')))
         <a href="{{route('products_edit')}}" class="btn btn-success form-control">Add Product</a>
-        @endcan
+        @endif
     </div>
 </div>
+
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
 <form>
     <div class="row">
         <div class="col col-sm-2">
@@ -59,14 +72,14 @@
 					        <h3>{{$product->name}}</h3>
 					    </div>
 					    <div class="col col-2">
-                            @can('edit_products')
+                            @if(auth()->check() && (auth()->user()->isEmployee() || auth()->user()->isAdmin() || auth()->user()->hasPermissionTo('edit_products') || auth()->user()->hasPermissionTo('manage_products')))
 					        <a href="{{route('products_edit', $product->id)}}" class="btn btn-success form-control">Edit</a>
-                            @endcan
+                            @endif
 					    </div>
 					    <div class="col col-2">
-                            @can('delete_products')
+                            @if(auth()->check() && (auth()->user()->isEmployee() || auth()->user()->isAdmin() || auth()->user()->hasPermissionTo('delete_products') || auth()->user()->hasPermissionTo('manage_products')))
 					        <a href="{{route('products_delete', $product->id)}}" class="btn btn-danger form-control">Delete</a>
-                            @endcan
+                            @endif
 					    </div>
 					</div>
 
@@ -74,9 +87,43 @@
                         <tr><th width="20%">Name</th><td>{{$product->name}}</td></tr>
                         <tr><th>Model</th><td>{{$product->model}}</td></tr>
                         <tr><th>Code</th><td>{{$product->code}}</td></tr>
-                        <tr><th>Price</th><td>{{$product->price}}</td>
+                        <tr><th>Price</th><td>${{ number_format($product->price, 2) }}</td></tr>
                         <tr><th>Description</th><td>{{$product->description}}</td></tr>
+                        <tr>
+                            <th>Availability</th>
+                            <td>
+                                @if($product->isInStock())
+                                    <span class="badge bg-success">In Stock</span>
+                                    <span class="ms-2">{{ $product->getAvailableQuantity() }} available</span>
+                                @else
+                                    <span class="badge bg-danger">Out of Stock</span>
+                                @endif
+                            </td>
+                        </tr>
                     </table>
+                    
+                    @auth
+                        @if(auth()->user()->isCustomer())
+                            @if($product->isInStock())
+                                <form action="{{ route('products_purchase', $product->id) }}" method="POST" class="mt-3">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-text">Quantity</span>
+                                                <input type="number" name="quantity" class="form-control" value="1" min="1" max="{{ $product->getAvailableQuantity() }}" required>
+                                                <button type="submit" class="btn btn-primary">Buy Now</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            @else
+                                <div class="alert alert-warning mt-3">
+                                    This product is currently out of stock.
+                                </div>
+                            @endif
+                        @endif
+                    @endauth
                 </div>
             </div>
         </div>

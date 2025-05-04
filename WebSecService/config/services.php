@@ -14,6 +14,13 @@ return [
     |
     */
 
+    'mailgun' => [
+        'domain' => env('MAILGUN_DOMAIN'),
+        'secret' => env('MAILGUN_SECRET'),
+        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+        'scheme' => 'https',
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
@@ -34,5 +41,13 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+
+    'github' => [
+        'client_id' => 'Ov23lieBKhiY05fDG0Qf',
+        'client_secret' => 'f2ba2f73d47ca243012507678ce79e95b2305388',
+        'redirect' => 'http://127.0.0.1:8000/auth/github/callback',
+    ],
+
+    // Social login providers removed
 
 ];
