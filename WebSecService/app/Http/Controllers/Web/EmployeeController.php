@@ -30,10 +30,8 @@ class EmployeeController extends Controller
                 ->with('error', 'You do not have permission to access this page');
         }
         
-        // Get all users with customer role
-        $customers = User::role('customer')->get();
-        
-        return view('employee.customers', compact('customers'));
+        // Redirect to the manage customers page
+        return redirect()->route('employee.manage_customers');
     }
     
     /**

@@ -5,10 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
-<<<<<<< HEAD
 use App\Models\UserCredit;
-=======
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -38,20 +35,12 @@ class AdminUserSeeder extends Seeder
         // Create roles if they don't exist
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $employeeRole = Role::firstOrCreate(['name' => 'employee']);
-<<<<<<< HEAD
         $customerRole = Role::firstOrCreate(['name' => 'customer']);
-=======
-        $userRole = Role::firstOrCreate(['name' => 'user']);
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
 
         // Assign permissions to roles
         $adminRole->syncPermissions(array_keys($permissions));
         $employeeRole->syncPermissions(['show_users', 'edit_users']);
-<<<<<<< HEAD
         $customerRole->syncPermissions(['show_users']);
-=======
-        $userRole->syncPermissions(['show_users']);
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
 
         // Create admin user
         $admin = User::firstOrNew(['email' => 'admin@example.com']);
@@ -68,24 +57,6 @@ class AdminUserSeeder extends Seeder
             $admin->assignRole('admin');
         }
 
-<<<<<<< HEAD
-=======
-        // Create regular user
-        $user = User::firstOrNew(['email' => 'user@example.com']);
-        if (!$user->exists) {
-            $user->fill([
-                'name' => 'Regular User',
-                'password' => bcrypt('User@123'),
-                'is_admin' => false,
-                'security_question' => 'What is your favorite food?',
-                'security_answer' => 'pizza',
-            ]);
-            $user->save();
-            // Assign user role
-            $user->assignRole('user');
-        }
-
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
         // Create employee user
         $employee = User::firstOrNew(['email' => 'employee@example.com']);
         if (!$employee->exists) {
@@ -100,7 +71,6 @@ class AdminUserSeeder extends Seeder
             // Assign employee role
             $employee->assignRole('employee');
         }
-<<<<<<< HEAD
         
         // Create customer user
         $customer = User::firstOrNew(['email' => 'customer@example.com']);
@@ -122,7 +92,5 @@ class AdminUserSeeder extends Seeder
                 ['amount' => 1000.00]
             );
         }
-=======
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
     }
 }

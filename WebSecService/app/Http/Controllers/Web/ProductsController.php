@@ -113,7 +113,6 @@ class ProductsController extends Controller {
 			return redirect()->route('login');
 		}
 		
-<<<<<<< HEAD
 		// Check if user is an employee or admin
 		$user = Auth::user();
 		if(!$user->isEmployee() && !$user->isAdmin() && 
@@ -121,10 +120,6 @@ class ProductsController extends Controller {
            !$user->hasPermissionTo('manage_products')) {
 			return redirect()->route('products_list')
 				->with('error', 'You do not have permission to delete products');
-=======
-		if(!auth()->user()->hasPermissionTo('delete_products')) {
-			return redirect()->route('products_list')->with('error', 'You do not have permission to delete products');
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
 		}
 		
 		$product->delete();
@@ -177,4 +172,41 @@ class ProductsController extends Controller {
 	{
 		return view('products.show', compact('product'));
 	}
+
+    /**
+     * Toggle favorite status for a product.
+     */
+    public function favorite(Request $request, Product $product)
+    {
+        $user = Auth::user();
+
+        // Check if user is a customer
+        if (!$user->isCustomer()) {
+            return redirect()->back()->with('error', 'Only customers can favorite products.');
+        }
+
+        if ($user->favorites()->where('product_id', $product->id)->exists()) {
+            // Already favorited, so unfavorite
+            $user->favorites()->detach($product->id);
+            $message = 'Product unfavorited.';
+        } else {
+            // Not favorited, so favorite
+            $user->favorites()->attach($product->id);
+            $message = 'Product favorited.';
+        }
+
+        // Redirect back to the product list or product show page
+        return redirect()->back()->with('success', $message);
+    }
+
+    /**
+     * Display a list of favorited products.
+     */
+    public function favoritesList()
+    {
+        $user = Auth::user();
+        $favoriteProducts = $user->favorites()->with('inventory')->get();
+
+        return view('products.favorites_list', compact('favoriteProducts'));
+    }
 } 

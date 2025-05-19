@@ -54,7 +54,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'https://websecservice.localhost.com'),
+
+    'asset_url' => env('ASSET_URL', 'https://websecservice.localhost.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -164,10 +166,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-<<<<<<< HEAD
         Spatie\Permission\PermissionServiceProvider::class,
-=======
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
+        Laravel\Socialite\SocialiteServiceProvider::class,
     ],
 
     /*
@@ -232,6 +232,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
     ],
 
 ];

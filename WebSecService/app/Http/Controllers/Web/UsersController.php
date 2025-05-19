@@ -13,10 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Models\PasswordReset;
 use Carbon\Carbon;
-<<<<<<< HEAD
 use Illuminate\Support\Facades\Hash;
-=======
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -26,7 +23,6 @@ class UsersController extends Controller {
 	use ValidatesRequests;
 
     public function list(Request $request) {
-<<<<<<< HEAD
         // Get current user
         $user = auth()->user();
         
@@ -37,9 +33,6 @@ class UsersController extends Controller {
         }
         
         // Create the base query
-=======
-        // Show all users regardless of permissions
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
         $query = User::select('*');
         
         // Apply keyword search if provided
@@ -62,7 +55,6 @@ class UsersController extends Controller {
         'password' => ['required', 'string', 'min:8', 'confirmed'],
     ]);
 
-<<<<<<< HEAD
     $user = User::create([
         'name' => $request->name,
         'email' => $request->email,
@@ -81,31 +73,6 @@ class UsersController extends Controller {
     Auth::login($user);
 
     return redirect('/');
-=======
-    	try {
-    		$this->validate($request, [
-	        'name' => ['required', 'string', 'min:5'],
-	        'email' => ['required', 'email', 'unique:users'],
-	        'password' => ['required', 'confirmed', Password::min(8)->numbers()->letters()->mixedCase()->symbols()],
-            'security_question' => ['required'],
-            'security_answer' => ['required'],
-	    	]);
-    	}
-    	catch(\Exception $e) {
-    		return redirect()->back()->withInput($request->input())->withErrors('Invalid registration information.');
-    	}
-
-    	
-    	$user =  new User();
-	    $user->name = $request->name;
-	    $user->email = $request->email;
-	    $user->password = bcrypt($request->password); //Secure
-        $user->security_question = $request->security_question;
-        $user->security_answer = $request->security_answer;
-	    $user->save();
-
-        return redirect('/');
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
     }
 
     public function login(Request $request) {
@@ -127,10 +94,6 @@ class UsersController extends Controller {
         
         Auth::setUser($user);
         
-<<<<<<< HEAD
-=======
-        // Check if user is logging in with a temporary password
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
         if ($user->is_using_temp_password) {
             return redirect()->route('change_temp_password');
         }
@@ -178,7 +141,6 @@ class UsersController extends Controller {
         }
    
         $user = $user??auth()->user();
-<<<<<<< HEAD
         
         // For employees - they can only edit themselves or customer accounts
         if(auth()->user()->isEmployee() && !auth()->user()->isAdmin()) {
@@ -194,9 +156,6 @@ class UsersController extends Controller {
         
         // For regular users, check edit_users permission
         if(auth()->id() != $user->id) {
-=======
-        if(auth()->id()!=$user?->id) {
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
             if(!auth()->user()->hasPermissionTo('edit_users')) {
                 return redirect()->route('profile');
             }
@@ -481,7 +440,6 @@ class UsersController extends Controller {
         
         return redirect()->route('home')->with('success', 'Your password has been updated successfully.');
     }
-<<<<<<< HEAD
 
     /**
      * Show form to create a new employee account (admin only)
@@ -646,6 +604,4 @@ class UsersController extends Controller {
             return redirect()->back()->with('success', 'User has been blocked successfully');
         }
     }
-=======
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
 } 

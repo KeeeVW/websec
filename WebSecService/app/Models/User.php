@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
 class User extends Authenticatable
@@ -32,10 +33,7 @@ class User extends Authenticatable
         'provider',
         'provider_id',
         'avatar',
-<<<<<<< HEAD
         'is_blocked',
-=======
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
     ];
 
     /**
@@ -102,6 +100,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'employee_customers', 'customer_id', 'employee_id')
             ->withTimestamps();
+    }
+    
+    /**
+     * Get the products the user has favorited.
+     */
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_favorites');
     }
     
     /**

@@ -104,6 +104,21 @@
                     
                     @auth
                         @if(auth()->user()->isCustomer())
+                            {{-- Favorite Button --}}
+                            @php
+                                $isFavorited = auth()->user()->favorites->contains($product->id);
+                            @endphp
+
+                            <form action="{{ route('products.favorite', $product->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @if ($isFavorited)
+                                    @method('DELETE') {{-- Use DELETE method for unfavorite --}}
+                                    <button type="submit" class="btn btn-warning btn-sm">Unfavorite</button>
+                                @else
+                                    <button type="submit" class="btn btn-outline-primary btn-sm">Favorite</button>
+                                @endif
+                            </form>
+
                             @if($product->isInStock())
                                 <form action="{{ route('products_purchase', $product->id) }}" method="POST" class="mt-3">
                                     @csrf

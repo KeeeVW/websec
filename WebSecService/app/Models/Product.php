@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model  {
 
@@ -28,6 +29,14 @@ class Product extends Model  {
     public function purchases()
     {
         return $this->hasMany(Purchase::class);
+    }
+    
+    /**
+     * Get the users who have favorited this product.
+     */
+    public function favoritedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'product_favorites');
     }
     
     /**

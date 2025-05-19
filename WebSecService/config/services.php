@@ -42,15 +42,12 @@ return [
         ],
     ],
 
-<<<<<<< HEAD
     'github' => [
-        'client_id' => 'Ov23lieBKhiY05fDG0Qf',
-        'client_secret' => 'f2ba2f73d47ca243012507678ce79e95b2305388',
-        'redirect' => 'http://127.0.0.1:8000/auth/github/callback',
+        'client_id' => env('GITHUB_CLIENT_ID'),
+        'client_secret' => env('GITHUB_CLIENT_SECRET'),
+        'redirect' => env('GITHUB_REDIRECT_URI'),
     ],
 
-=======
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
     // Social login providers removed
 
 ];

@@ -9,13 +9,10 @@ use App\Http\Controllers\ExamController;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Web\RolesController;
 use App\Http\Controllers\Web\PermissionsController;
-<<<<<<< HEAD
-use App\Http\Controllers\Web\CreditController;
+use App\Http\Controllers\Web\CreditsController;
 use App\Http\Controllers\Web\EmployeeCustomerController;
 use App\Http\Controllers\Web\EmployeeController;
 use App\Http\Controllers\GitHubAuthController;
-=======
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
 
 Route::get('register', [UsersController::class, 'register'])->name('register');
 Route::post('register', [UsersController::class, 'doRegister'])->name('do_register');
@@ -159,165 +156,76 @@ Route::get('/test-result', function () {
 });
 
 // Add these routes for roles and permissions management
-<<<<<<< HEAD
-Route::middleware(['auth'])->group(function () {
-    Route::resource('roles', RolesController::class);
-    Route::resource('permissions', PermissionsController::class);
-});
-
-// Credit system
-Route::middleware(['auth'])->group(function () {
-    // Main credit route - redirects based on role
-    Route::get('/credits', [App\Http\Controllers\Web\CreditsController::class, 'index'])->name('credits.index');
-    
-    Route::get('/admin/credits', [App\Http\Controllers\Web\CreditsController::class, 'adminIndex'])
-        ->middleware(['auth'])->name('credits.admin');
-    
-    Route::get('/credits/add', [App\Http\Controllers\Web\CreditsController::class, 'selfAddForm'])
-        ->middleware(['auth'])->name('credits.self_add');
-    Route::post('/credits/add', [App\Http\Controllers\Web\CreditsController::class, 'selfAddStore'])
-        ->middleware(['auth'])->name('credits.self_add_store');
-    
-    Route::get('/credits/customer/{customer}', [App\Http\Controllers\Web\CreditsController::class, 'addForm'])
-        ->middleware(['auth'])->name('credits.add_form');
-    Route::post('/credits/customer/{customer}', [App\Http\Controllers\Web\CreditsController::class, 'addCredit'])
-        ->middleware(['auth'])->name('credits.add');
-    
-    Route::get('/employee/customers', [App\Http\Controllers\Web\UsersController::class, 'employeeCustomers'])
-        ->name('employee.customers');
-    
-    Route::resource('employee_customers', App\Http\Controllers\Web\EmployeeCustomerController::class);
-});
-
-Route::get('/manage-customers', [App\Http\Controllers\Web\EmployeeCustomerController::class, 'index'])
-    ->name('manage.customers');
-
-Route::get('/employee/dashboard', [App\Http\Controllers\Web\EmployeeController::class, 'dashboard'])
-    ->name('employee.dashboard');
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('users', [UsersController::class, 'list'])->name('users');
-    Route::get('users/create-employee', [UsersController::class, 'createEmployee'])->name('users_create_employee');
-    Route::post('users/create-employee', [UsersController::class, 'storeEmployee'])->name('users_create_employee_post');
-    Route::get('users/edit/{user}', [UsersController::class, 'edit'])->name('users_edit');
-    Route::post('users/edit/{user}', [UsersController::class, 'save'])->name('users_save');
-    Route::get('users/delete/{user}', [UsersController::class, 'delete'])->name('users_delete');
-    Route::get('users/ensure-roles', [UsersController::class, 'ensureUserRoles'])->name('users_ensure_roles');
-});
-
-// Direct test route for employee permissions
-Route::get('/employee/test', function() {
-    $user = auth()->user();
-    
-    if (!$user) {
-        return 'Not logged in';
-    }
-    
-    $output = '<h1>Role & Permission Test</h1>';
-    
-    // Check roles
-    $output .= '<h2>Roles</h2>';
-    $output .= 'Has employee role: ' . ($user->hasRole('employee') ? 'Yes' : 'No') . '<br>';
-    $output .= 'Is employee (method): ' . ($user->isEmployee() ? 'Yes' : 'No') . '<br>';
-    $output .= 'All roles: ' . implode(', ', $user->getRoleNames()->toArray()) . '<br>';
-    
-    // Check permissions
-    $output .= '<h2>Permissions</h2>';
-    $output .= 'Has view_customers permission: ' . ($user->hasPermissionTo('view_customers') ? 'Yes' : 'No') . '<br>';
-    $output .= 'Has view_users permission: ' . ($user->hasPermissionTo('view_users') ? 'Yes' : 'No') . '<br>';
-    $output .= 'Has manage_customers permission: ' . ($user->hasPermissionTo('manage_customers') ? 'Yes' : 'No') . '<br>';
-    $output .= 'All direct permissions: ' . implode(', ', $user->getDirectPermissions()->pluck('name')->toArray()) . '<br>';
-    $output .= 'All permissions (including role-based): ' . implode(', ', $user->getAllPermissions()->pluck('name')->toArray()) . '<br>';
-    
-    $output .= '<h2>Test Links</h2>';
-    $output .= '<a href="' . route('users') . '">Users Page</a><br>';
-    $output .= '<a href="' . route('employee.customers') . '">Manage Customers Page</a><br>';
-    $output .= '<a href="/">Home</a>';
-    
-    return $output;
-})->name('employee.test');
-
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/toggle-block/{user}', [App\Http\Controllers\Web\UsersController::class, 'toggleBlockStatus'])
-        ->name('toggle_block');
-});
-
-Route::get('/debug/credits/{userId}', function($userId) {
-    $user = \App\Models\User::findOrFail($userId);
-    $credit = \App\Models\UserCredit::where('user_id', $userId)->first();
-    $transactions = \App\Models\CreditTransaction::where('user_id', $userId)
-        ->orderBy('created_at', 'desc')
-        ->get();
-    
-    $html = "<h1>Credit Debug for User: {$user->name} (ID: {$user->id})</h1>";
-    $html .= "<h2>Credit Record</h2>";
-    
-    if ($credit) {
-        $html .= "<p>Balance in database: {$credit->amount}</p>";
-    } else {
-        $html .= "<p>No credit record found!</p>";
-    }
-    
-    $html .= "<p>Balance from User::getCreditAmount(): {$user->getCreditAmount()}</p>";
-    
-    $html .= "<h2>Recent Transactions</h2>";
-    $html .= "<table border='1' style='border-collapse: collapse; width: 100%;'>";
-    $html .= "<tr><th>ID</th><th>Type</th><th>Amount</th><th>Description</th><th>Added By</th><th>Date</th></tr>";
-    
-    foreach ($transactions as $transaction) {
-        $addedBy = $transaction->added_by ? \App\Models\User::find($transaction->added_by)->name : 'N/A';
-        $html .= "<tr>";
-        $html .= "<td>{$transaction->id}</td>";
-        $html .= "<td>{$transaction->type}</td>";
-        $html .= "<td>{$transaction->amount}</td>";
-        $html .= "<td>{$transaction->description}</td>";
-        $html .= "<td>{$addedBy} (ID: {$transaction->added_by})</td>";
-        $html .= "<td>{$transaction->created_at}</td>";
-        $html .= "</tr>";
-    }
-    
-    $html .= "</table>";
-    
-    // Fix credits button
-    $html .= "<form method='POST' action='/debug/fix-credits/{$userId}'>";
-    $html .= csrf_field();
-    $html .= "<button type='submit' style='margin-top:20px; padding:10px; background-color:#4CAF50; color:white; border:none; cursor:pointer;'>Fix Credits (Recalculate from Transactions)</button>";
-    $html .= "</form>";
-    
-    return $html;
-})->name('debug.credits');
-
-Route::post('/debug/fix-credits/{userId}', function($userId) {
-    $user = \App\Models\User::findOrFail($userId);
-    
-    // Calculate total from transactions
-    $transactions = \App\Models\CreditTransaction::where('user_id', $userId)->get();
-    $total = 0;
-    
-    foreach ($transactions as $transaction) {
-        $total += $transaction->amount;
-    }
-    
-    // Update or create the credit record
-    \Illuminate\Support\Facades\DB::transaction(function() use ($userId, $total) {
-        $credit = \App\Models\UserCredit::firstOrCreate(
-            ['user_id' => $userId],
-            ['amount' => 0]
-        );
-        $credit->amount = $total;
-        $credit->save();
-    });
-    
-    return redirect()->route('debug.credits', $userId)->with('success', 'Credits fixed!');
-})->name('debug.fix-credits');
-
-// GitHub Authentication Routes
-Route::get('/auth/github', [GitHubAuthController::class, 'redirectToGitHub'])->name('auth.github');
-Route::get('/auth/github/callback', [GitHubAuthController::class, 'handleGitHubCallback'])->name('auth.github.callback');
-=======
 Route::group(['middleware' => ['auth', 'permission:admin_users']], function () {
     Route::resource('roles', RolesController::class);
     Route::resource('permissions', PermissionsController::class);
 });
->>>>>>> 6c4297d3fdfd66398b2d51a8dc8705571982f414
+
+// GitHub Authentication Routes
+Route::get('/auth/github', [GitHubAuthController::class, 'redirect'])->name('auth.github');
+Route::get('/auth/github/callback', [GitHubAuthController::class, 'callback'])->name('auth.github.callback');
+
+// User Management Routes
+Route::prefix('users')->name('users_')->group(function () {
+    Route::get('/create-employee', [UsersController::class, 'createEmployee'])->name('create_employee');
+    Route::post('/create-employee', [UsersController::class, 'storeEmployee'])->name('create_employee_post');
+    Route::get('/toggle-block/{user}', [UsersController::class, 'toggleBlockStatus'])->name('toggle_block');
+    Route::get('/ensure-roles', [UsersController::class, 'ensureUserRoles'])->name('ensure_roles');
+});
+
+// Credit Management Routes
+Route::prefix('credits')->name('credits.')->group(function () {
+    Route::get('/', [CreditsController::class, 'index'])->name('index');
+    Route::get('/admin', [CreditsController::class, 'adminIndex'])->name('admin');
+    Route::get('/add/{customer}', [CreditsController::class, 'addForm'])->name('add_form');
+    Route::post('/add/{customer}', [CreditsController::class, 'addCredit'])->name('add');
+    Route::get('/transactions', [CreditsController::class, 'index'])->name('transactions');
+    Route::get('/self-add', [CreditsController::class, 'selfAddForm'])->name('self_add');
+    Route::post('/self-add', [CreditsController::class, 'selfAddStore'])->name('self_add_store');
+});
+
+// Employee Management Routes
+Route::prefix('employee')->name('employee.')->group(function () {
+    Route::get('/dashboard', [EmployeeController::class, 'dashboard'])->name('dashboard');
+    Route::get('/customers', [EmployeeController::class, 'listCustomers'])->name('customers');
+    Route::get('/manage-customers', [EmployeeCustomerController::class, 'index'])->name('manage_customers');
+});
+
+// Employee-Customer Management Routes
+Route::prefix('employee-customers')->name('employee_customers.')->group(function () {
+    Route::get('/', [EmployeeCustomerController::class, 'index'])->name('index');
+    Route::get('/create', [EmployeeCustomerController::class, 'create'])->name('create');
+    Route::post('/', [EmployeeCustomerController::class, 'store'])->name('store');
+    Route::delete('/{customer}', [EmployeeCustomerController::class, 'destroy'])->name('destroy');
+});
+
+// Role Management Routes
+Route::prefix('roles')->name('roles.')->group(function () {
+    Route::get('/', [RolesController::class, 'index'])->name('index');
+    Route::get('/create', [RolesController::class, 'create'])->name('create');
+    Route::post('/', [RolesController::class, 'store'])->name('store');
+    Route::get('/{role}/edit', [RolesController::class, 'edit'])->name('edit');
+    Route::put('/{role}', [RolesController::class, 'update'])->name('update');
+    Route::delete('/{role}', [RolesController::class, 'destroy'])->name('destroy');
+});
+
+// Permission Management Routes
+Route::prefix('permissions')->name('permissions.')->group(function () {
+    Route::get('/', [PermissionsController::class, 'index'])->name('index');
+    Route::get('/create', [PermissionsController::class, 'create'])->name('create');
+    Route::post('/', [PermissionsController::class, 'store'])->name('store');
+    Route::get('/{permission}/edit', [PermissionsController::class, 'edit'])->name('edit');
+    Route::put('/{permission}', [PermissionsController::class, 'update'])->name('update');
+    Route::delete('/{permission}', [PermissionsController::class, 'destroy'])->name('destroy');
+});
+
+// Temporary test route for cryptography
+// Route::get('/cryptography', function () {
+//     return 'Cryptography route is working!';
+// });
+
+// Customer Favorite Products Routes
+Route::middleware(['auth'])->group(function () {
+    Route::match(['post', 'delete'], '/products/{product}/favorite', [ProductsController::class, 'favorite'])->name('products.favorite');
+    Route::get('/favorites', [ProductsController::class, 'favoritesList'])->name('products.favorites.list');
+});

@@ -92,7 +92,7 @@
           <a class="btn btn-primary" href='{{route('edit_password', [$user->id])}}'>Change Password</a>
           @endcan
           @if(auth()->user()->isAdmin() || auth()->user()->isEmployee())
-          <a href="{{ route('toggle_block', $user->id) }}" class="btn {{ $user->isBlocked() ? 'btn-warning' : 'btn-danger' }} btn-sm">
+          <a href="{{ route('users_toggle_block', $user->id) }}" class="btn {{ $user->isBlocked() ? 'btn-warning' : 'btn-danger' }} btn-sm">
             {{ $user->isBlocked() ? 'Unblock' : 'Block' }}
           </a>
           @endif
